@@ -41,10 +41,17 @@ function attachEvents() {
                 postDetailsElement.innerHTML = `${data.body}`;
             })
 
-        fetch(`${commentsUrl}/-MSbypx-13fHPDyzNRtf`)
+        fetch(`${commentsUrl}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            const commentsData = Object.values(data);
+            const currentPostComments = commentsData.filter(comment => comment.postId === currentSelectedBlogId);
+            commentsElement.innerHTML = "";
+
+            currentPostComments.forEach(com => {
+                commentsElement.innerHTML += `<li>${com.text}</li>`;
+            })
+            console.log(currentPostComments);
         })
     }
 
