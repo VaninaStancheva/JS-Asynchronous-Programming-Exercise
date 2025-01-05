@@ -37,7 +37,6 @@ function attachEvents() {
         fetch(`${postsUrl}/${currentSelectedBlogId}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 postDetailsElement.innerHTML = `${data.body}`;
             })
 
@@ -47,11 +46,9 @@ function attachEvents() {
             const commentsData = Object.values(data);
             const currentPostComments = commentsData.filter(comment => comment.postId === currentSelectedBlogId);
             commentsElement.innerHTML = "";
-
             currentPostComments.forEach(com => {
                 commentsElement.innerHTML += `<li>${com.text}</li>`;
             })
-            console.log(currentPostComments);
         })
     }
 
