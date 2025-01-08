@@ -44,6 +44,7 @@ function lockedProfile() {
         fetch(url)
             .then(response => response.json())
             .then(data => {
+                console.log(data)
                 const profilesData = Object.values(data);
                 profilesData.forEach((profile) => {
                     let cardContainer = document.createElement('div');
@@ -63,6 +64,7 @@ function lockedProfile() {
                         let inputEl = document.createElement('input');
                         inputEl.setAttribute('type', `${meta.type}`);
                         inputEl.setAttribute('name', `${meta.name}${profile._id}`);
+                        inputEl.setAttribute('id', `${meta.name}${profile._id}`);
                         inputEl.setAttribute('value', `${meta.value}`);
                         if (inputEl.type === 'radio' && inputEl.value === 'lock') {
                             inputEl.checked = true;
@@ -84,14 +86,20 @@ function lockedProfile() {
                     showBtnElement.addEventListener('click', onShowBtnClicked);
 
 
+
                 })
             })
-
     }
     creatProfileCards ()
+
+    function onShowBtnClicked(e) {
+        e.currentTarget.innerText = 'Hide it'
+
+    }
+
 }
 
-function onShowBtnClicked (e) {
-    e.preventDefault();
-    console.log('clicked')
-}
+
+
+
+
