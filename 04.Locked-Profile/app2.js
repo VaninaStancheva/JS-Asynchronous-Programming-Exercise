@@ -88,14 +88,19 @@
         radioButton.checked = buttonData.checked;
         radioButtonLabel.innerText = buttonData.innerText;
 
-        radioButton.addEventListener('click', () => {
-            toggleButton();
-            console.log(radioButton.value);
-            console.log(radioButton.name);
+        radioButton.addEventListener('click', (e) => {
+            toggleButton(e);
         })
 
         cardElement.appendChild(radioButtonLabel);
         cardElement.appendChild(radioButton);
+    }
+
+    function toggleButton(e) {
+        const id = e.currentTarget.name;
+        const buttonElement = document.getElementById(`${id}-showBtn`);
+        buttonElement.disabled = !buttonElement.disabled;
+        return buttonElement.disabled;
     }
 
     function createProfileInfoForm (profileFormData, cardElement, cardData, profileInfoContainer) {
@@ -137,31 +142,28 @@
         const button = document.createElement('button');
         button.id = `${cardData._id}-showBtn`;
         button.innerText = 'Show more';
+        button.disabled = true;
 
         button.addEventListener('click', (e) => {
-            let clickCount = 0;
-            onShowClicked(e, clickCount);
-            //onHideClicked(e);
+            onShowClicked(e);
         })
 
         cardElement.appendChild(button);
 
     }
 
-   function onShowClicked (e, clickCount) {
+   function onShowClicked (e) {
         e.preventDefault();
-       clickCount ++;
-       const buttonId = e.target.id.split('-');
+        const buttonId = e.currentTarget.id.split('-');
         buttonId.pop();
         const id = buttonId.join('-');
-        e.currentTarget.innerText = 'Hide it';
         const cardInfoElement = document.getElementById(`${id}-infoContainer`);
-        cardInfoElement.style.visibility = 'visible';
-
-        if (clickCount === 2) {
+        if(cardInfoElement.style.visibility === 'hidden') {
+            e.currentTarget.innerText = 'Hide it';
+            cardInfoElement.style.visibility = 'visible'
+        } else if (cardInfoElement.style.visibility === 'visible') {
             e.currentTarget.innerText = 'Show more';
             cardInfoElement.style.visibility = 'hidden';
-            console.log(clickCount)
         }
     }
 })()
