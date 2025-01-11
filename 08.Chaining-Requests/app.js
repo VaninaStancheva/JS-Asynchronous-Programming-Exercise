@@ -9,16 +9,26 @@
         fetch(`${postsUrl}`)
         .then(res => res.json())
         .then(dataPosts => {
-            console.log(dataPosts);
-
-            const ulElement = document.createElement('ul');
-            postDiv.appendChild(ulElement);
+            const olElement = document.createElement('ol');
+            postDiv.appendChild(olElement);
 
             dataPosts.forEach(dataPost => {
-                ulElement.innerHTML += `<li><h4>${dataPost.title}</h4>
-                                            <p>${dataPost.body}</p>
-                                            <button id="${dataPost.id}">Show coments</button>
-                                        </li>`;
+                olElement.id = `posts-${dataPost.id}`;
+                const liElement = document.createElement('li');
+                const titleElement = document.createElement('h4');
+                const paragraphElement = document.createElement('p');
+                const btnComElement = document.createElement('button');
+
+                titleElement.innerText = dataPost.title;
+                paragraphElement.innerText = dataPost.body;
+                btnComElement.innerText = 'Show comments';
+                btnComElement.id = dataPost.id;
+
+                olElement.appendChild(liElement);
+                liElement.appendChild(titleElement);
+                liElement.appendChild(paragraphElement);
+                liElement.appendChild(btnComElement);
+
                 const showButton = document.getElementById(`${dataPost.id}`);
                 showButton.addEventListener('click', getComments)
             })
@@ -27,23 +37,30 @@
 
     function getComments(e) {
         e.preventDefault();
+        const id = Number(e.currentTarget.id);
+        commentsDiv.innerHTML = '';
+
         fetch(`${commentsUrl}`)
             .then(res => res.json())
             .then(dataComments => {
-                console.log(dataComments);
-
 
                 const ulElement = document.createElement('ul');
                 commentsDiv.appendChild(ulElement);
 
-                dataComments.forEach(dataComment => {
-                    if (e.currentTarget.id === dataComment.id) {
-                        ulElement.innerHTML += `<li><h4>${dataComment.name}</h4>
-                                            <p>${dataComment.body}</p>
-                                        </li>`;
-                    }
+                const currentPostComments = dataComments.filter(comment => comment.postId === id);
+
+                currentPostComments.forEach(currentPostComment => {
+                    const comLiElement = document.createElement('li');
+                    const nameElement = document.createElement('h5');
+                    const paragraphElement = document.createElement('p');
+
+                    nameElement.innerText = `name: ${currentPostComment.name}, email: ${currentPostComment.email}`;
+                    paragraphElement.innerText = currentPostComment.body;
+
+                    ulElement.appendChild(comLiElement);
+                    comLiElement.appendChild(nameElement);
+                    comLiElement.appendChild(paragraphElement);
                 })
             })
     }
-
 })()
